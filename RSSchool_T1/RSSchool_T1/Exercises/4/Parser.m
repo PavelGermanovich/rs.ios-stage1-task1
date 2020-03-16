@@ -15,84 +15,55 @@
     
     for (int i = 0; i < [string length]; i++) {
         if ([[string substringWithRange:NSMakeRange(i, 1)]  isEqual: openedParantheses]) {
-            NSString *openedBracketString = [string substringFromIndex:i+1];
-            NSRange rangeLocation = NSMakeRange(NSNotFound, 0);
-            int openedBracketSymbolFoundBeforeCount = 0;
-            
-            for (int j = 0; j < [openedBracketString length]; j++) {
-                if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:openedParantheses]) {
-                    openedBracketSymbolFoundBeforeCount++;
-                }
-                if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:closedParantheses]) {
-                    if (openedBracketSymbolFoundBeforeCount != 0) {
-                        openedBracketSymbolFoundBeforeCount--;
-                        continue;
-                    }
-                    else {
-                        rangeLocation = NSMakeRange(i + 1, j);
-                        break;
-                    }
-                }
-            }
-            
-            if (rangeLocation.location != NSNotFound) {
-                [resultArray addObject: [string substringWithRange: rangeLocation]];
+            NSString *returnedElement = [self returnElementFromString:string insideOpenedBracket:openedParantheses byIndexOfChar:i andClosedBracket:closedParantheses];
+            if (![returnedElement isEqual:nil]) {
+                [resultArray addObject:returnedElement];
             }
         }
         else if ([[string substringWithRange:NSMakeRange(i, 1)]  isEqual: openedSquareBracket]) {
-              NSString *openedBracketString = [string substringFromIndex:i+1];
-              NSRange rangeLocation = NSMakeRange(NSNotFound, 0);
-              int openedBracketSymbolFoundBeforeCount = 0;
-              
-              for (int j = 0; j < [openedBracketString length]; j++) {
-                  if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:openedSquareBracket]) {
-                      openedBracketSymbolFoundBeforeCount++;
-                  }
-                  if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:closedSquareBracket]) {
-                      if (openedBracketSymbolFoundBeforeCount != 0) {
-                          openedBracketSymbolFoundBeforeCount--;
-                          continue;
-                      }
-                      else {
-                          rangeLocation = NSMakeRange(i + 1, j);
-                          break;
-                      }
-                  }
-              }
-              
-              if (rangeLocation.location != NSNotFound) {
-                  [resultArray addObject: [string substringWithRange: rangeLocation]];
-              }
+            NSString *returnedElement = [self returnElementFromString:string insideOpenedBracket:openedSquareBracket byIndexOfChar:i andClosedBracket:closedSquareBracket];
+            if (![returnedElement isEqual:nil]) {
+                [resultArray addObject:returnedElement];
+            }
         }
         else if ([[string substringWithRange:NSMakeRange(i, 1)]  isEqual: openedAngleBracket]) {
-            NSString *openedBracketString = [string substringFromIndex:i+1];
-            NSRange rangeLocation = NSMakeRange(NSNotFound, 0);
-            int openedBracketSymbolFoundBeforeCount = 0;
-                 
-            for (int j = 0; j < [openedBracketString length]; j++) {
-                if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:openedAngleBracket]) {
-                    openedBracketSymbolFoundBeforeCount++;
-                }
-                
-                if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:closedAngleBracket]) {
-                    if (openedBracketSymbolFoundBeforeCount != 0) {
-                             openedBracketSymbolFoundBeforeCount--;
-                             continue;
-                         }
-                         else {
-                             rangeLocation = NSMakeRange(i + 1, j);
-                             break;
-                         }
-                     }
-                 }
-                 
-                 if (rangeLocation.location != NSNotFound) {
-                     [resultArray addObject: [string substringWithRange: rangeLocation]];
-                 }
+            NSString *returnedElement = [self returnElementFromString:string insideOpenedBracket:openedAngleBracket byIndexOfChar:i andClosedBracket:closedAngleBracket];
+            if (![returnedElement isEqual:nil]) {
+                [resultArray addObject:returnedElement];
+            }
         }
     }
     
     return resultArray;
+}
+
+- (NSString*) returnElementFromString: (NSString *)string insideOpenedBracket: (NSString *)openedBracket byIndexOfChar: (int)index  andClosedBracket: (NSString *)closedBracket {
+    NSString *openedBracketString = [string substringFromIndex:index+1];
+    NSRange rangeLocation = NSMakeRange(NSNotFound, 0);
+    int openedBracketSymbolFoundBeforeCount = 0;
+    
+    for (int j = 0; j < [openedBracketString length]; j++) {
+        if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:openedBracket]) {
+            openedBracketSymbolFoundBeforeCount++;
+        }
+        if ([[openedBracketString substringWithRange:NSMakeRange(j, 1)] isEqual:closedBracket]) {
+            if (openedBracketSymbolFoundBeforeCount != 0) {
+                openedBracketSymbolFoundBeforeCount--;
+                continue;
+            }
+            else {
+                rangeLocation = NSMakeRange(index + 1, j);
+                break;
+            }
+        }
+    }
+    
+    if (rangeLocation.location != NSNotFound) {
+        return [string substringWithRange: rangeLocation];
+    }
+    else {
+        return nil;
+    }
 }
 
 @end
